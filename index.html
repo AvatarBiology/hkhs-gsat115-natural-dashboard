@@ -70,6 +70,9 @@ svg text{font-family:inherit}
 /* 科目篩選 chips */
 .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
 .legend .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;vertical-align:baseline}
+/* 強制手機版（JS 偵測，不受桌面模式 viewport 影響） */
+body.force-mobile #drawer{width:auto;left:0;right:0;max-width:100vw}
+body.force-mobile #drawer .dbody{padding:14px;overflow-x:hidden}
 /* 引導策略卡片 */
 .scard{border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px;background:#fff}
 .scard-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
@@ -489,6 +492,9 @@ async function tryLogin(){
   }
 }
 function initLogin(){
+  // 偵測行動裝置：觸控＋小螢幕，或 UA 含 Mobile → 強制手機版抽屜（不受桌面模式 viewport 影響）
+  const isMobile = ('ontouchstart' in window) && (Math.min(screen.width, screen.height) < 820 || /Mobile|Android|iPhone|iPad/i.test(navigator.userAgent));
+  if(isMobile) document.body.classList.add('force-mobile');
   // 設定校徽
   if(LOGO){
     const sl=document.getElementById('schoolLogo');
