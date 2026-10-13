@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>115學測自然科｜試題分析儀表板（湖口高中 vs 全國）</title>
 <style>
 :root{
@@ -930,12 +930,19 @@ function openDrawer(qno){
   document.getElementById('drawer').classList.add('on');
   document.getElementById('drawer').scrollTop=0;
   bindBadgeLinks(document.getElementById('dBody'));
+  // 手機版：用行內樣式強制全螢幕（繞過所有 CSS 媒體查詢 / class 判斷問題）
+  const dw=document.getElementById('drawer');
+  if(document.body.classList.contains('force-mobile')||window.innerWidth<=768||('ontouchstart' in window&&Math.min(screen.width,screen.height)<820)){
+    dw.style.width='100vw';dw.style.left='0';dw.style.right='0';dw.style.maxWidth='100vw';
+  }
   // 鎖定背景滾動（手機上避免抽屜與背景互相干擾）
   document.body.style.overflow='hidden';
 }
 function closeDrawer(){
   document.getElementById('scrim').classList.remove('on');
-  document.getElementById('drawer').classList.remove('on');
+  const dw=document.getElementById('drawer');
+  dw.classList.remove('on');
+  dw.style.width='';dw.style.left='';dw.style.right='';dw.style.maxWidth='';
   state.selected=null;
   document.body.style.overflow='';
 }
